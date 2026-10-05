@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Péter Shop – Modern Webshop</title>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Arial;
+        margin: 0;
+        background: #f0f2f5;
+        color: #333;
+    }
+
+    header {
+        background: linear-gradient(135deg, #4a00e0, #8e2de2);
+        color: white;
+        padding: 25px;
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    nav {
+        background: white;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    nav a {
+        margin: 0 15px;
+        text-decoration: none;
+        font-weight: bold;
+        color: #4a00e0;
+        font-size: 1.1rem;
+    }
+
+    .cart-icon {
+        font-size: 1.4rem;
+        display: inline-block;
+        transition: transform 0.3s ease;
+    }
+
+    .cart-icon.animate {
+        animation: cartBounce 0.6s ease;
+    }
+
+    @keyframes cartBounce {
+        0%   { transform: scale(1); }
+        30%  { transform: scale(1.3) rotate(10deg); }
+        60%  { transform: scale(1.3) rotate(-10deg); }
+        100% { transform: scale(1); }
+    }
+
+    .page {
+        display: none;
+        padding: 20px;
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    .product {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        transition: transform .2s;
+    }
+    .product:hover {
+        transform: scale(1.02);
+    }
+    .product img {
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    button {
+        background: #4a00e0;
+        color: white;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-top: 10px;
+        transition: background .2s;
+    }
+    button:hover {
+        background: #3600a8;
+    }
+
+    .item {
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+    }
+
+    .login-box {
+        background: white;
+        padding: 25px;
+        width: 350px;
+        margin: 40px auto;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        text-align: center;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+    }
+</style>
+</head>
+<body>
+
+<header>Péter Shop – Modern Webshop</header>
+
+<nav>
+    <a href="#" onclick="showPage('shop')">Termékek</a>
+    <a href="#" onclick="showPage('cart')">
+        <span id="cartIcon" class="cart-icon">🛒</span> Kosár
+    </a>
+    <a href="#" onclick="showPage('login')">Admin</a>
+</nav>
+
+<!-- TERMÉKEK -->
+<div id="shop" class="page" style="display:block;">
+    <h2>Termékek</h2>
+
+    <div class="product">
+        <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1a0">
+        <h3>Termék 1</h3>
+        <p>4990 Ft</p>
+        <button onclick="addToCart('Termék 1', 4990)">Kosárba</button>
+    </div>
+
+    <div class="product">
+        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f">
+        <h3>Termék 2</h3>
+        <p>6990 Ft</p>
+        <button onclick="addToCart('Termék 2', 6990)">Kosárba</button>
+    </div>
+
+    <div class="product">
+        <img src="https://images.unsplash.com/photo-1503602642458-232111445657">
+        <h3>Termék 3</h3>
+        <p>8990 Ft</p>
+        <button onclick="addToCart('Termék 3', 8990)">Kosárba</button>
+    </div>
+</div>
+
+<!-- KOSÁR -->
+<div id="cart" class="page">
+    <h2>Kosár</h2>
+    <div id="cartItems"></div>
+    <p id="totalPrice" style="font-size:1.4rem; font-weight:bold;"></p>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="page">
+    <div class="login-box">
+        <h2>Admin belépés</h2>
+        <input id="adminUser" type="text" placeholder="Felhasználónév">
+        <input id="adminPass" type="password" placeholder="Jelszó">
+        <button onclick="adminLogin()">Belépés</button>
+        <p id="loginError" style="color:red;"></p>
+    </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin" class="page">
+    <h2>Admin felület</h2>
+
+    <h3>Új termék hozzáadása</h3>
+    <input id="newName" type="text" placeholder="Termék neve">
+    <input id="newPrice" type="number" placeholder="Ár (Ft)">
+    <input id="newImage" type="text" placeholder="Kép URL">
+    <textarea id="newDesc" placeholder="Leírás"></textarea>
+    <button onclick="addProduct()">Termék hozzáadása</button>
+
+    <h3>Termékek</h3>
+    <div id="adminProducts"></div>
+</div>
+
+<script>
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+}
+
+/* KOSÁR */
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function addToCart(name, price) {
+    cart.push({ name, price });
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    const icon = document.getElementById("cartIcon");
+    icon.classList.add("animate");
+    setTimeout(() => icon.classList.remove("animate"), 600);
+
+    alert("A termék a kosárba került!");
+}
+
+function renderCart() {
+    const div = document.getElementById("cartItems");
+    div.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item, i) => {
+        total += item.price;
+        div.innerHTML += `
+            <div class="item">
+                <h3>${item.name}</h3>
+                <p>${item.price} Ft</p>
+                <button onclick="removeItem(${i})">Törlés</button>
+            </div>
+        `;
+    });
+
+    document.getElementById("totalPrice").innerText = "Végösszeg: " + total + " Ft";
+}
+
+function removeItem(i) {
+    cart.splice(i, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+}
+
+/* ADMIN LOGIN */
+const ADMIN_USER = "peter";
+const ADMIN_PASS = "admin123";
+
+function adminLogin() {
+    const u = document.getElementById("adminUser").value;
+    const p = document.getElementById("adminPass").value;
+
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+        showPage('admin');
+    } else {
+        document.getElementById("loginError").innerText = "Hibás adatok!";
+    }
+}
+
+/* ADMIN TERMÉKEK */
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+function addProduct() {
+    const name = document.getElementById("newName").value;
+    const price = document.getElementById("newPrice").value;
+    const image = document.getElementById("newImage").value;
+    const desc = document.getElementById("newDesc").value;
+
+    products.push({ name, price, image, desc });
+    localStorage.setItem("products", JSON.stringify(products));
+    renderAdminProducts();
+}
+
+function renderAdminProducts() {
+    const div = document.getElementById("adminProducts");
+    div.innerHTML = "";
+
+    products.forEach((p, i) => {
+        div.innerHTML += `
+            <div class="item">
+                <h3>${p.name}</h3>
+                <p>${p.price} Ft</p>
+                <img src="${p.image}" width="150">
+                <p>${p.desc}</p>
+                <button onclick="deleteProduct(${i})">Törlés</button>
+            </div>
+        `;
+    });
+}
+
+function deleteProduct(i) {
+    products.splice(i, 1);
+    localStorage.setItem("products", JSON.stringify(products));
+    renderAdminProducts();
+}
+
+renderCart();
+renderAdminProducts();
+</script>
+
+</body>
+</html>
